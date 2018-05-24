@@ -14,7 +14,6 @@
         }
     ],
     "extra": {
-        "icon": "icon.svg",
-        "scripts": "scripts.php"
+        "icon": "icon.svg"
     }
 }

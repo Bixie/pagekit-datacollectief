@@ -4,5 +4,5 @@ $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/b
     ['version' => $app->module('bixie/pk-framework')->getVersionKey($app->package('bixie/datacollectief')->get('version'))]);
 ?>
 <div id="datacollectief-index">
-    <h1>{{ 'Datacollectief index' | trans }}</h1>
+    <h1>{{ 'Datacollectief API' | trans }}</h1>
 </div>

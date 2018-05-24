@@ -2,12 +2,17 @@
 
 return [
     'name' => 'bixie/datacollectief',
+
     'type' => 'extension',
+
     'main' => 'Bixie\\Datacollectief\\DatacollectiefModule',
+
     'autoload' => [
         'Bixie\\Datacollectief\\' => 'src'
     ],
+
     'nodes' => [],
+
     'routes' => [
         '/datacollectief' => [
             'name' => '@datacollectief',
@@ -20,13 +25,16 @@ return [
             'controller' => []
         ]
     ],
+
     'resources' => [
         'bixie/datacollectief:' => ''
     ],
+
     'config' => [
         'username' => '',
         'api_key' => ''
     ],
+
     'menu' => [
         'datacollectief' => [
             'label' => 'Datacollectief',
@@ -50,11 +58,14 @@ return [
             'active' => '@datacollectief/settings'
         ]
     ],
+
     'permissions' => [
         'datacollectief: use datacollectief' => [
             'title' => 'Use datacollectief'
         ]
     ],
+
     'settings' => '@datacollectief/settings',
+
     'events' => []
 ];
