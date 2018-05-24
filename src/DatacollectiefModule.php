@@ -2,6 +2,8 @@
 
 namespace Bixie\Datacollectief;
 
+use Bixie\Datacollectief\Event\DatacollectiefEmailreaderListener;
+use Bixie\Datacollectief\Event\WebsiteleadsListener;
 use Pagekit\Application as App;
 use Pagekit\Module\Module;
 
@@ -17,7 +19,20 @@ class DatacollectiefModule extends Module
      */
     public function main(App $app)
     {
-        //todo main code, dependancies, boot-event
+
+        $app->on('boot', function () use ($app) {
+
+            $app->subscribe(
+                new WebsiteleadsListener,
+                new DatacollectiefEmailreaderListener
+            );
+
+            $app['datacollectief.api'] = function ($app) {
+                return new Api\Api($this->config(['username', 'api_key']), $app['debug']);
+            };
+
+        });
+
     }
 
     /**
