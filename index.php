@@ -8,7 +8,7 @@ return [
     'main' => 'Bixie\\Datacollectief\\DatacollectiefModule',
 
     'autoload' => [
-        'Bixie\\Datacollectief\\' => 'src'
+        'Bixie\\Datacollectief\\' => 'src',
     ],
 
     'nodes' => [],
@@ -17,22 +17,27 @@ return [
         '/datacollectief' => [
             'name' => '@datacollectief',
             'controller' => [
-                'Bixie\\Datacollectief\\Controller\\DatacollectiefController'
-            ]
+                'Bixie\\Datacollectief\\Controller\\DatacollectiefController',
+            ],
         ],
         '/api/datacollectief' => [
             'name' => '@datacollectief/api',
-            'controller' => []
-        ]
+            'controller' => [
+                'Bixie\\Datacollectief\\Controller\\DatacollectiefApiController',
+            ],
+        ],
     ],
 
     'resources' => [
-        'bixie/datacollectief:' => ''
+        'bixie/datacollectief:' => '',
     ],
 
     'config' => [
-        'username' => '',
-        'api_key' => ''
+        'api_url' => '',
+        'application_key' => '',
+        'license_name' => '',
+        'password' => '',
+        'wl_last_checked' => (new DateTime())->format(DATE_ATOM),
     ],
 
     'menu' => [
@@ -41,31 +46,31 @@ return [
             'icon' => 'packages/bixie/datacollectief/icon.svg',
             'url' => '@datacollectief/index',
             'access' => 'datacollectief: use datacollectief',
-            'active' => '@datacollectief(/*)'
+            'active' => '@datacollectief(/*)',
         ],
         'datacollectief: index' => [
             'label' => 'Datacollectief',
             'parent' => 'datacollectief',
             'url' => '@datacollectief/index',
             'access' => 'datacollectief: use datacollectief',
-            'active' => '@datacollectief/index'
+            'active' => '@datacollectief/index',
         ],
         'datacollectief: settings' => [
             'label' => 'Settings',
             'parent' => 'datacollectief',
             'url' => '@datacollectief/settings',
             'access' => 'system: access settings',
-            'active' => '@datacollectief/settings'
+            'active' => '@datacollectief/settings',
         ]
     ],
 
     'permissions' => [
         'datacollectief: use datacollectief' => [
-            'title' => 'Use datacollectief'
+            'title' => 'Use datacollectief',
         ]
     ],
 
     'settings' => '@datacollectief/settings',
 
-    'events' => []
+    'events' => [],
 ];

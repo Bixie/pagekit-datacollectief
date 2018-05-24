@@ -10,6 +10,10 @@ class DatacollectiefApiEvent extends Event {
      * @var array
      */
     protected $data;
+    /**
+     * @var array
+     */
+    protected $processed_data = [];
 
     /**
      * Constructor.
@@ -30,4 +34,17 @@ class DatacollectiefApiEvent extends Event {
         return $this->data;
     }
 
+    /**
+     * @return array
+     */
+    public function getProcessedData () {
+        return $this->processed_data;
+    }
+
+    /**
+     * @param array $processed_data
+     */
+    public function setProcessedData ($processed_data) {
+        $this->processed_data = $processed_data;
+    }
 }

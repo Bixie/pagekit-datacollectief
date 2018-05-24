@@ -30,6 +30,18 @@ class DatacollectiefController
     }
 
     /**
+     * @Route ("/websiteleads", methods="GET", name="websiteleads")
+     * @Request({"options": "array"}, csrf=true)
+     * @return array
+     */
+    public function websiteleadsAction($options = [])
+    {
+
+
+        return $options;
+    }
+
+    /**
      * @Access ("system: access settings")
      * @return array
      */

@@ -17,9 +17,9 @@ class WebsiteleadsListener implements EventSubscriberInterface {
      * @param DatacollectiefApiEvent $event
      */
     public function incomingWebsitelead (DatacollectiefApiEvent $event) {
-        $data = $event->getData();
+        $lead = $event->getData();
 
-        $company = Company::where(['external_id' => $data['dc_id']])->first();
+        $company = Company::where(['external_id' => $lead['CompanyInfo']['Id']])->first();
 
         if ($company) {
 
@@ -31,15 +31,16 @@ class WebsiteleadsListener implements EventSubscriberInterface {
                 'type' => 'email',
                 'description' => 'Emailreader import',
                 'subject' => 'Website bezoek',
-                'content' => $data['text'],
+                'content' => '',
                 'company_id' => $company->id,
                 'contact_id' => 0,
                 'user_id' => 0,
                 'sender' => $sender->toArray(),
                 'receiver' => $receiver->toArray(),
-                'data' =>  array_diff_key($data, array_flip(['text'])),
+                'data' => $lead,
             ])->save();
 
+            $event->setProcessedData(['company' => $company->toArray(),]);
         }
     }
 

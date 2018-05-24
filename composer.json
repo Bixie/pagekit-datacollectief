@@ -15,5 +15,8 @@
     ],
     "extra": {
         "icon": "icon.svg"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "~6.3"
     }
 }

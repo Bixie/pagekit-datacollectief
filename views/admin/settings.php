@@ -36,6 +36,15 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
 
                     <bixie-fields :config="$options.fields.settings" :values.sync="config"></bixie-fields>
 
+                    <hr/>
+
+                    <div class="uk-form-row">
+                        <label class="uk-form-label">{{ 'Websiteleads last checked' | trans }}</label>
+                        <div class="uk-form-controls">
+                            <input-date-bix :datetime.sync="config.wl_last_checked"></input-date-bix>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
 

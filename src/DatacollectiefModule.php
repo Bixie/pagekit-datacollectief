@@ -23,12 +23,13 @@ class DatacollectiefModule extends Module
         $app->on('boot', function () use ($app) {
 
             $app->subscribe(
-                new WebsiteleadsListener,
-                new DatacollectiefEmailreaderListener
+                new WebsiteleadsListener
             );
 
             $app['datacollectief.api'] = function ($app) {
-                return new Api\Api($this->config(['username', 'api_key']), $app['debug']);
+                return new Api\Api($this->config([
+                    'api_url', 'application_key', 'license_name', 'password',
+                 ]), $app['debug']);
             };
 
         });
