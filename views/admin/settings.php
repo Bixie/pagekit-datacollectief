@@ -1,0 +1,45 @@
+
+<?php
+$view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/datacollectief-settings.js', ['bixie-pkframework'],
+    ['version' => $app->module('bixie/pk-framework')->getVersionKey($app->package('bixie/datacollectief')->get('version'))]);
+?>
+<div id="datacollectief-settings">
+    <div class="uk-grid pk-grid-large" data-uk-grid-margin>
+        <div class="pk-width-sidebar">
+
+            <div class="uk-panel">
+
+                <ul class="uk-nav uk-nav-side pk-nav-large" data-uk-tab="{ connect: '#tab-content' }">
+                    <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Settings' | trans }}</a></li>
+                </ul>
+
+            </div>
+
+        </div>
+        <div class="pk-width-content">
+
+            <ul id="tab-content" class="uk-switcher uk-margin">
+                <li class="uk-form uk-form-horizontal">
+
+                    <div class="uk-margin uk-flex uk-flex-space-between uk-flex-wrap" data-uk-margin>
+                        <div data-uk-margin>
+
+                            <h2 class="uk-margin-remove">{{ 'Datacollectief Settings' | trans }}</h2>
+
+                        </div>
+                        <div data-uk-margin>
+
+                            <button class="uk-button uk-button-primary" @click="save">{{ 'Save' | trans }}</button>
+
+                        </div>
+                    </div>
+
+                    <bixie-fields :config="$options.fields.settings" :values.sync="config"></bixie-fields>
+
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+</div>
