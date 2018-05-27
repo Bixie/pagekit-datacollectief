@@ -18,27 +18,21 @@ class DatacollectiefController
      */
     public function indexAction()
     {
+//        $lead = [];
+//        $lead['CompanyInfo']['Id'] = 53273;
+//        $event = new \Bixie\Datacollectief\Event\DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
+//        App::trigger($event);
+//        $lead['processed_data'] = $event->getProcessedData();
+
         return [
             '$view' => [
-                'title' => 'Datacollectief index',
-                'name' => 'bixie/datacollectief/admin/index.php'
+                'title' => 'Websiteleads API',
+                'name' => 'bixie/datacollectief/admin/index.php',
             ],
             '$data' => [
-                'config' => App::module('bixie/datacollectief')->config()
-            ]
+                'config' => App::module('bixie/datacollectief')->config(),
+            ],
         ];
-    }
-
-    /**
-     * @Route ("/websiteleads", methods="GET", name="websiteleads")
-     * @Request({"options": "array"}, csrf=true)
-     * @return array
-     */
-    public function websiteleadsAction($options = [])
-    {
-
-
-        return $options;
     }
 
     /**
@@ -53,8 +47,9 @@ class DatacollectiefController
                 'name' => 'bixie/datacollectief/admin/settings.php'
             ],
             '$data' => [
-                'config' => App::module('bixie/datacollectief')->config()
-            ]
+                'config' => App::module('bixie/datacollectief')->config(),
+                'indications' => array_values(App::taxonomy('cm.company.indication')->terms()),
+            ],
         ];
     }
 

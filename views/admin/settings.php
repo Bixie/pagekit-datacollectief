@@ -45,6 +45,17 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                         </div>
                     </div>
 
+                    <div class="uk-form-row">
+                        <label class="uk-form-label">{{ 'Websiteleads tag' | trans }}</label>
+
+                        <div class="uk-form-controls">
+                            <select v-model="config.wl_tag" class="uk-form-width-medium">
+                                <option value="">{{ 'Select tag' | trans }}</option>
+                                <option v-for="tag in indications" :value="tag.slug">{{ tag.title }}</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
 

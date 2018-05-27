@@ -38,6 +38,7 @@ return [
         'license_name' => '',
         'password' => '',
         'wl_last_checked' => (new DateTime())->format(DATE_ATOM),
+        'wl_tag' => '',
     ],
 
     'menu' => [
@@ -49,7 +50,7 @@ return [
             'active' => '@datacollectief(/*)',
         ],
         'datacollectief: index' => [
-            'label' => 'Datacollectief',
+            'label' => 'Websiteleads',
             'parent' => 'datacollectief',
             'url' => '@datacollectief/index',
             'access' => 'datacollectief: use datacollectief',

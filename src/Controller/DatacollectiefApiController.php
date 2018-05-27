@@ -8,7 +8,7 @@ use Pagekit\Application as App;
 
 /**
  * Datacollectief Admin Controller
- *
+ * @Access("datacollectief: use datacollectief")
  */
 class DatacollectiefApiController
 {
@@ -22,12 +22,12 @@ class DatacollectiefApiController
     {
 
         try {
-            $websites = App::get('datacollectief.api')->websites();
+            $websiteFields = App::get('datacollectief.api')->websites();
         } catch (DatacollectiefApiException $e) {
             App::abort($e->getCode(), $e->getMessage());
         }
 
-        return compact('websites');
+        return compact('websiteFields');
     }
 
     /**
@@ -39,6 +39,7 @@ class DatacollectiefApiController
     public function websiteleadsLeadsAction($options = [])
     {
 
+        $processed_data = [];
         try {
             $leads = App::get('datacollectief.api')->websiteleads($options);
         } catch (DatacollectiefApiException $e) {
@@ -49,12 +50,12 @@ class DatacollectiefApiController
         foreach ($leads as $lead) {
             $event = new DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
             App::trigger($event);
-            $lead['processed_data'] = $event->getProcessedData();
+            $processed_data[] = $event->getProcessedData();
         }
 
-        App::config('bixie/datacollectief')->set('wl_last_checked', (new \DateTime())->format(DATE_ATOM));
+        App::config('bixie/datacollectief')->set('wl_last_checked', (new \DateTime($options['To']))->format(DATE_ATOM));
 
-        return compact('leads');
+        return compact('processed_data');
     }
 
 

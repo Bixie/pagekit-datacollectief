@@ -1,27 +1,31 @@
+/* global Vue, */
 
-module.exports = {
-
-    name: 'datacollectief-settings',
+// @vue/component
+const vm = {
 
     el: '#datacollectief-settings',
+
+    name: 'SatacollectiefSettings',
 
     fields: require('../../settings/fields'),
 
     data() {
-        return _.merge({
-            config: {},
+        const {config, indications,} = window.$data;
+        return {
+            config,
+            indications,
             form: {},
-        }, window.$data);
+        };
     },
 
     methods: {
         save() {
-            this.$http.post('admin/datacollectief/config', {config: this.config}).then(() => {
+            this.$http.post('admin/datacollectief/config', {config: this.config,}).then(() => {
                 this.$notify('Settings saved.');
             }, res => this.$notify((res.data.message || res.data), 'danger'));
         },
-    }
+    },
 
 };
 
-Vue.ready(module.exports);
+Vue.ready(vm);

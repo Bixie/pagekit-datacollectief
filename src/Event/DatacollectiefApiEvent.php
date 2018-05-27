@@ -45,6 +45,6 @@ class DatacollectiefApiEvent extends Event {
      * @param array $processed_data
      */
     public function setProcessedData ($processed_data) {
-        $this->processed_data = $processed_data;
+        $this->processed_data = array_merge($this->processed_data, $processed_data);
     }
 }
