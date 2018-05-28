@@ -104,7 +104,7 @@ class WebsiteleadsListener implements EventSubscriberInterface {
                 'date' => $visit_date,
                 'description' => $description,
                 'subject' => sprintf('Sitebezoek, %d pagina\'s, %d minuten (%d) - %s',
-                    $visit_info['numberOfPagesField'], $visit_info['durationField'],
+                    $visit_info['numberOfPagesField'], round($visit_info['durationField'] / 60, 1),
                     $visit_info['highestRatingScoreField'], $visit_date->format('d-m H:i')
                 ),
                 'content' => $result['clickpath'],
