@@ -5,7 +5,6 @@ namespace Bixie\Datacollectief\Event;
 
 use Bixie\Contactmanager\Communication\Sender;
 use Bixie\Contactmanager\Model\Company;
-use Bixie\Contactmanager\Model\Contact;
 use Bixie\Contactmanager\Model\Log;
 use Pagekit\Event\EventSubscriberInterface;
 use Pagekit\Application as App;
@@ -31,10 +30,20 @@ class WebsiteleadsListener implements EventSubscriberInterface {
         'uRLField' => 'website',
         'coCnumberField' => 'coc_number',
     ];
+
+    protected $wl_tag_ignore = [];
+    protected $wl_tag_add = [];
+    protected $wl_tag_remove = [];
+
     /**
      * @param DatacollectiefApiEvent $event
      */
     public function incomingWebsitelead (DatacollectiefApiEvent $event) {
+
+        $this->wl_tag_ignore = App::module('bixie/datacollectief')->config('wl_tag_ignore', []);
+        $this->wl_tag_add = App::module('bixie/datacollectief')->config('wl_tag_add', []);
+        $this->wl_tag_remove = App::module('bixie/datacollectief')->config('wl_tag_remove', []);
+
         $lead = $event->getData();
         $result = [
             'handler' => 'WebsiteleadsListener',
@@ -73,27 +82,21 @@ class WebsiteleadsListener implements EventSubscriberInterface {
             $result['isNewCompany'] = true;
         } else {
             $result['messages'][] = sprintf('Existing company %d matched', $company->id);
-            $indications = $company->getIndications();
+            $indications = array_map(function ($term) {
+                return $term->slug;
+            }, $company->getIndications());
             //check data
             $result['changed_data'] = $this->updateCompany($company, $company_info);
         }
+        //check ignore tag
+        if (count(array_intersect($this->wl_tag_ignore, $indications)) > 0) {
+            return;
+        }
+
         //todo check contacts
 
         //check tags
-        $wl_tag = App::module('bixie/datacollectief')->config('wl_tag', '');
-        $hasWlTag = false;
-        foreach ($indications as $index => $indication) {
-            if ($indication->slug == $wl_tag) {
-                $hasWlTag = true;
-                break;
-            }
-        }
-        if (!$hasWlTag) {
-            $taxonomy = App::taxonomy('cm.company.indication');
-            $indications[] = $taxonomy->termBySlug($wl_tag);
-            $taxonomy->saveTerms($company->id, $indications);
-            $result['messages'][] = sprintf('Tag %s added', $wl_tag);
-        }
+        $this->checkCompanyTags($company, $indications);
 
         //set log. Index lead_id in description to prevent double entries
         $description = "$lead_id.websiteleads.API";
@@ -197,6 +200,32 @@ class WebsiteleadsListener implements EventSubscriberInterface {
     }
 
     /**
+     * @param Company $company
+     * @param array   $current_indications
+     */
+    protected function checkCompanyTags ($company, $current_indications) {
+        //check tags
+        //add needed tags
+        $tags_to_add = array_diff($this->wl_tag_add, $current_indications);
+        if (count($tags_to_add)) {
+            $current_indications = array_merge($current_indications, $tags_to_add);
+        }
+        //remove unwanted tags
+        $orig_count = count($current_indications);
+        $current_indications = array_diff($current_indications, $this->wl_tag_remove);
+
+        if (count($tags_to_add) || count($current_indications) != $orig_count) {
+            $taxonomy = App::taxonomy('cm.company.indication');
+            $indications = array_map(function ($slug) use ($taxonomy) {
+                return $taxonomy->termBySlug($slug);
+            }, $current_indications);
+            $taxonomy->saveTerms($company->id, $indications);
+            $result['messages'][] = sprintf('Tags %s added', implode(', ', $current_indications));
+        }
+
+    }
+
+    /**
      * @param array $clickpath_routes
      * @return string
      */
@@ -215,6 +244,11 @@ class WebsiteleadsListener implements EventSubscriberInterface {
         return implode("<br/>", $lines);
     }
 
+    /**
+     * @param string $type
+     * @param array $data
+     * @return Log
+     */
     protected function createLog ($type, $data) {
         $sender = new Sender('Websiteleads', 'info@websiteleads.nl');
         $receiver = new Sender('Sales Freight Hero', 'sales@thefreighthero.com');

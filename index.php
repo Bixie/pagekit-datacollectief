@@ -38,7 +38,9 @@ return [
         'license_name' => '',
         'password' => '',
         'wl_last_checked' => (new DateTime())->format(DATE_ATOM),
-        'wl_tag' => '',
+        'wl_tag_ignore' => [],
+        'wl_tag_add' => [],
+        'wl_tag_remove' => [],
     ],
 
     'menu' => [

@@ -46,13 +46,38 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                     </div>
 
                     <div class="uk-form-row">
-                        <label class="uk-form-label">{{ 'Websiteleads tag' | trans }}</label>
+                        <label class="uk-form-label">{{ 'Websiteleads tags negeren' | trans }}</label>
 
                         <div class="uk-form-controls">
-                            <select v-model="config.wl_tag" class="uk-form-width-medium">
+                            <select v-model="config.wl_tag_ignore" class="uk-form-width-medium" multiple size="4">
                                 <option value="">{{ 'Select tag' | trans }}</option>
                                 <option v-for="tag in indications" :value="tag.slug">{{ tag.title }}</option>
                             </select>
+                            <p class="uk-form-help-block">{{ 'Negeer bedrijven met deze tags' | trans }}</p>
+                        </div>
+                    </div>
+
+                    <div class="uk-form-row">
+                        <label class="uk-form-label">{{ 'Websiteleads tags toevoegen' | trans }}</label>
+
+                        <div class="uk-form-controls">
+                            <select v-model="config.wl_tag_add" class="uk-form-width-medium" multiple size="4">
+                                <option value="">{{ 'Select tag' | trans }}</option>
+                                <option v-for="tag in indications" :value="tag.slug">{{ tag.title }}</option>
+                            </select>
+                            <p class="uk-form-help-block">{{ 'Voeg deze tags toe aan bedrijf' | trans }}</p>
+                        </div>
+                    </div>
+
+                    <div class="uk-form-row">
+                        <label class="uk-form-label">{{ 'Websiteleads tags verwijderen' | trans }}</label>
+
+                        <div class="uk-form-controls">
+                            <select v-model="config.wl_tag_remove" class="uk-form-width-medium" multiple size="4">
+                                <option value="">{{ 'Select tag' | trans }}</option>
+                                <option v-for="tag in indications" :value="tag.slug">{{ tag.title }}</option>
+                            </select>
+                            <p class="uk-form-help-block">{{ 'Verwijder deze tags bij bedrijf' | trans }}</p>
                         </div>
                     </div>
 

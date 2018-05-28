@@ -50,7 +50,9 @@ class DatacollectiefApiController
         foreach ($leads as $lead) {
             $event = new DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
             App::trigger($event);
-            $processed_data[] = $event->getProcessedData();
+            if ($data = $event->getProcessedData()) {
+                $processed_data[] = $event->getProcessedData();
+            }
         }
 
         App::config('bixie/datacollectief')->set('wl_last_checked', (new \DateTime($options['To']))->format(DATE_ATOM));
