@@ -2,22 +2,23 @@
 module.exports = {
     settings: {
         api_url: {
+            tip: 'Make sure the url ends with /',
             type: 'text',
             label: 'Api url',
             attrs: {
                 'class': 'uk-form-width-large',
             },
         },
-        application_key: {
+        application_name: {
             type: 'text',
-            label: 'Application key',
+            label: 'Application name',
             attrs: {
                 'class': 'uk-form-width-large',
             },
         },
-        license_name: {
+        user: {
             type: 'text',
-            label: 'License name',
+            label: 'User',
             attrs: {
                 'class': 'uk-form-width-large',
             },

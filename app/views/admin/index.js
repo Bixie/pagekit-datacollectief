@@ -11,7 +11,7 @@ const vm = {
         const {config,} = window.$data;
         return {
             loading: false,
-            websiteFields: [],
+            Websites: [],
             processed_data: [],
             wl_options: {
                 From: (new Date(config.wl_last_checked)).toISOString(),
@@ -28,19 +28,36 @@ const vm = {
     computed: {
         websites() {
             const now = new Date();
-            return this.websiteFields.filter(wF => {
-                let startDate = new Date(`${wF.startDateField}T00:00:00+00:00`);
-                let endDate = new Date(`${wF.endDateField}T00:00:00+00:00`);
-                return startDate < now && (!wF.endDateField || endDate > now);
-            }).map(wF => wF.nameField)
+            return this.Websites.filter(wF => {
+                let startDate = new Date(`${wF.StartDate}T00:00:00+00:00`);
+                let endDate = new Date(`${wF.EndDate}T00:00:00+00:00`);
+                return startDate < now && (!wF.EndDate || endDate > now);
+            }).map(wF => wF.Name)
+        },
+        leadsByCompany() {
+            const leads = {};
+            this.filteredProcessedData.forEach(processed => {
+                const {messages, changed_data, company, lead,} = processed;
+                if (!leads[company.id]) {
+                    leads[company.id] = {
+                        company,
+                        messages,
+                        changed_data,
+                        leads: [lead,],
+                    };
+                } else {
+                    leads[company.id].leads.push(processed.lead);
+                }
+            });
+            return leads;
         },
         filteredProcessedData() {
-            return this.processed_data.map(pd => pd.websiteleads).filter(pd => {
+            return this.processed_data.map(pd => pd.contactmanager || {}).filter(pd => {
                 if (this.filter.status === 'new') {
                     return pd.isNewCompany;
-                } else if(this.filter.status === 'matched') {
+                } else if (this.filter.status === 'matched') {
                     return !pd.isNewCompany;
-                } else if(this.filter.status === 'modified') {
+                } else if (this.filter.status === 'modified') {
                     return pd.changed_data.length > 0;
                 }
                 return true;
@@ -60,7 +77,7 @@ const vm = {
             'leads': {method: 'get', url: 'api/datacollectief/websiteleads/leads',},
         });
         this.Api.websites().then(res => {
-            this.websiteFields = res.data.websiteFields;
+            this.Websites = res.data.Websites;
         }, res => this.$notify((res.data.message || res.data), 'danger'));
     },
 
@@ -71,7 +88,6 @@ const vm = {
             }
             this.loading = true;
             this.Api.leads({}, {options: this.wl_options,}).then(res => {
-                console.log(res.data);
                 this.processed_data = res.data.processed_data;
             }, res => this.$notify((res.data.message || res.data), 'danger'))
                 .then(() => this.loading = false);

@@ -2,8 +2,14 @@
 
 namespace Bixie\Datacollectief\Event;
 
+
 use Pagekit\Event\Event;
 
+/**
+ * Triggered when Websitelead has been fetched via the API
+ * Class DatacollectiefApiEvent
+ * @package Bixie\Datacollectief\Event
+ */
 class DatacollectiefApiEvent extends Event {
 
     /**

@@ -4,7 +4,7 @@
     "type": "pagekit-extension",
     "version": "0.0.5",
     "title": "Bixie Datacollectief",
-    "description": "Data-collectief API for Pagekit",
+    "description": "Data-collectief API Client for Pagekit",
     "license": "MIT",
     "authors": [
         {

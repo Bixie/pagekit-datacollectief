@@ -2,20 +2,80 @@
 
 namespace Bixie\Datacollectief\Controller;
 
+
 use Bixie\Datacollectief\Api\DatacollectiefApiException;
 use Bixie\Datacollectief\Event\DatacollectiefApiEvent;
 use Pagekit\Application as App;
 
 /**
- * Datacollectief Admin Controller
+ * Datacollectief API Controller
  * @Access("datacollectief: use datacollectief")
  */
 class DatacollectiefApiController
 {
 
     /**
+     * @Route ("/info", methods="GET", name="info")
+     * @Request(csrf=true)
+     * @return array
+     */
+    public function infoAction()
+    {
+        try {
+            $versionInfo = App::get('datacollectief.api')->version();
+            $downloadStatistics = App::get('datacollectief.api')->downloadStatistics();
+
+            $apiInfo = array_merge($versionInfo, $downloadStatistics);
+
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+        }
+
+        return compact('apiInfo');
+    }
+
+    /**
+     * @Route ("/baseTable/{table}", methods="GET", name="baseTable")
+     * @Request({"table": "string", "identifier": "string"}, csrf=true)
+     * @param string $table
+     * @param null $identifier
+     * @return array
+     */
+    public function baseTableAction($table, $identifier = null)
+    {
+        $return_properties = [
+            'BaseTableBranche' => 'BaseTableBranches',
+            'BaseTableEmployee' => 'BaseTableEmployees',
+            'BaseTableImportExport' => 'BaseTableBaseTableImportExport',
+            'BaseTableLegalForm' => 'BaseTableLegalForm',
+            'BaseTableMessageReasons' => 'MessageReasons',
+        ];
+
+        if (!isset($return_properties[$table])) {
+            App::abort(400, sprintf('Base table %s invalid', $table));
+        }
+
+        try {
+            $responseData = App::get('datacollectief.api')->baseTable($table);
+            if ($identifier) {
+                $baseTable = [];
+                foreach ($responseData[$return_properties[$table]] as $item) {
+                    $baseTable[$item[$identifier]] = $item;
+                }
+            } else {
+                $baseTable = $responseData[$return_properties[$table]];
+            }
+
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+        }
+
+        return compact('baseTable');
+    }
+
+    /**
      * @Route ("/websiteleads/websites", methods="GET", name="websiteleads/websites")
-     * @Request({"options": "array"}, csrf=true)
+     * @Request(csrf=true)
      * @return array
      */
     public function websiteleadsWebsitesAction()
@@ -23,11 +83,12 @@ class DatacollectiefApiController
 
         try {
             $websiteFields = App::get('datacollectief.api')->websites();
+            $Websites = $websiteFields['Websites'];
         } catch (DatacollectiefApiException $e) {
             App::abort($e->getCode(), $e->getMessage());
         }
 
-        return compact('websiteFields');
+        return compact('Websites');
     }
 
     /**
@@ -47,7 +108,7 @@ class DatacollectiefApiController
             return [];
         }
 
-        foreach ($leads as $lead) {
+        foreach ($leads['Visits'] as $lead) {
             $event = new DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
             App::trigger($event);
             if ($data = $event->getProcessedData()) {

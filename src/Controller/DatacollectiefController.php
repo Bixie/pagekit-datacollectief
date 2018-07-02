@@ -2,11 +2,11 @@
 
 namespace Bixie\Datacollectief\Controller;
 
+
 use Pagekit\Application as App;
 
 /**
  * Datacollectief Admin Controller
- *
  * @Access (admin=true)
  */
 class DatacollectiefController
@@ -18,11 +18,6 @@ class DatacollectiefController
      */
     public function indexAction()
     {
-//        $lead = [];
-//        $lead['CompanyInfo']['Id'] = 53273;
-//        $event = new \Bixie\Datacollectief\Event\DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
-//        App::trigger($event);
-//        $lead['processed_data'] = $event->getProcessedData();
 
         return [
             '$view' => [
@@ -61,7 +56,12 @@ class DatacollectiefController
      */
     public function configAction($config = [])
     {
-        App::config('bixie/datacollectief')->merge($config, true);
+        App::config('bixie/datacollectief')->merge($config, true)
+            ->set('BaseTableBranche', $config['BaseTableBranche'])
+            ->set('BaseTableEmployee', $config['BaseTableEmployee'])
+            ->set('BaseTableImportExport', $config['BaseTableImportExport'])
+            ->set('BaseTableLegalForm', $config['BaseTableLegalForm'])
+            ->set('BaseTableMessageReasons', $config['BaseTableMessageReasons']);
 
         return ['message' => 'success'];
     }

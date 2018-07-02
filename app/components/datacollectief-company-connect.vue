@@ -22,7 +22,6 @@
 
         props: {
             external_id: String,
-            company: Object,
         },
 
         computed: {

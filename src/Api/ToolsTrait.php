@@ -1,19 +1,20 @@
 <?php
 
+
 namespace Bixie\Datacollectief\Api;
 
 
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
-trait WebsiteleadsTrait {
+trait ToolsTrait {
 
     /**
-     * @return mixed
+     * @return array
      * @throws DatacollectiefApiException
      */
-    public function websites () {
+    public function version () {
         /** @var GuzzleResponse $response */
-        $response = $this->send('get', 'WebsiteleadsWebsites');
+        $response = $this->send('get', 'Version');
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
@@ -22,25 +23,32 @@ trait WebsiteleadsTrait {
     }
 
     /**
-     * @param $options (Website, From, To)
-     * @return mixed
+     * @return array
      * @throws DatacollectiefApiException
      */
-    public function websiteleads ($options) {
-        //convert dates
-        $tzZ = new \DateTimeZone('Europe/Amsterdam');
-        if (!empty($options['From'])) {
-            $options['From'] = (new \DateTime($options['From']))->setTimezone($tzZ)->format('Y-m-d');
-        }
-        if (!empty($options['To'])) {
-            $options['To'] = (new \DateTime($options['To']))->setTimezone($tzZ)->format('Y-m-d');
-        }
+    public function downloadStatistics () {
         /** @var GuzzleResponse $response */
-        $response = $this->send('get', 'WebsiteleadsLeads', $options);
+        $response = $this->send('get', 'DownloadStatistics');
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
             throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
         }
     }
+
+    /**
+     * @param $table
+     * @return mixed
+     * @throws DatacollectiefApiException
+     */
+    public function baseTable ($table) {
+        /** @var GuzzleResponse $response */
+        $response = $this->send('get', $table);
+        if (false !== ($data = $this->getData($response))) {
+            return $data ?: [];
+        } else {
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
-
 <?php
 $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/bundle/datacollectief-datacollectief-index.js', [
-        'bixie-pkframework', 'taxonomy',],
+    'bixie-pkframework', 'taxonomy',],
     ['version' => $app->module('bixie/pk-framework')->getVersionKey($app->package('bixie/datacollectief')->get('version'))]);
 ?>
 <div id="datacollectief-index">
@@ -41,7 +40,8 @@ $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/b
     </div>
 
     <div v-if="processed_data.length >= 250" class="uk-alert uk-alert-danger">
-        Meer dan 250 leads gevonden. Zoek met een kleiner datumbereik om er zeker van te zijn alle leads te laden</div>
+        Meer dan 250 leads gevonden. Zoek met een kleiner datumbereik om er zeker van te zijn alle leads te laden
+    </div>
 
     <div v-if="processed_data.length" class="uk-flex uk-flex-middle uk-flex-space-between uk-margin-top">
         <ul class="uk-subnav uk-subnav-line uk-margin-bottom-remove">
@@ -60,56 +60,59 @@ $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/b
     </div>
 
     <ul class="uk-list uk-list-striped">
-        <li v-for="processed in filteredProcessedData" track-by="lead.idField">
-            <div class="uk-grid uk-grid-small">
-                <div class="uk-width-1-4">
-                    <div class="uk-text-bold">
-                        {{ processed.lead.visitInfoField.startDateTimeField | date }} (score {{ processed.lead.visitInfoField.highestRatingScoreField }})
-                    </div>
-                    <div v-for="message in processed.messages">{{ message }}</div>
-                    <div v-for="changed_data in processed.changed_data">
+        <li v-for="companyLeads in leadsByCompany" track-by="company.id">
+            <div class="uk-grid uk-grid-small uk-grid-width-1-5" data-uk-grid-margin>
+                <div>
+                    <div v-for="message in companyLeads.messages">{{ message }}</div>
+                    <div v-for="changed_data in companyLeads.changed_data">
                         <strong>Changed: {{ changed_data.key }}</strong><br/>
                         {{ changed_data.old_value || '(empty)' }} --> {{ changed_data.new_value }}
                     </div>
                 </div>
-                <div class="uk-width-3-4">
-                    <div class="uk-grid uk-grid-small" data-uk-grid-margin>
-                        <div class="uk-width-1-3">
-                            <strong>{{ processed.company.name }}</strong><br/>
-                            {{ processed.company.address_1 }}<br/>
-                            {{ processed.company.zipcode }} {{ processed.company.city }}<br/>
-                            <div v-html="processed.clickpath"></div>
-                        </div>
-                        <div class="uk-width-2-3">
-                            <div class="uk-grid uk-grid-small uk-grid-width-medium-1-3" data-uk-grid-margin>
-                                <div class="uk-text-truncate">
-                                    {{ processed.company.email }}<br/>
-                                    {{ processed.company.data.website }}<br/>
-                                    Tel: <a v-phone.auto="processed.company.phone">{{ processed.company.phone }}</a><br/>
-                                    KvK: {{ processed.company.data.coc_number }}<br/>
-                                </div>
-                                <div class="uk-text-truncate">
-                                    <a :href="$url.route('admin/contactmanager/company/edit', { id: processed.company.id })"
-                                       target="_blank">
-                                        <i class="uk-icon-external-link uk-margin-small-right"></i>
-                                        {{ processed.company.name }}
-                                    </a><br/>
-                                    <a :href="getDatacollectiefLink(processed.company)" target="_blank">
-                                        <i class="uk-icon-external-link uk-margin-small-right"></i>
-                                        Websiteleads
-                                    </a>
+                <div>
+                    <strong>{{ companyLeads.company.name }}</strong><br/>
+                    {{ companyLeads.company.address_1 }}<br/>
+                    {{ companyLeads.company.zipcode }} {{ companyLeads.company.city }}<br/>
 
-                                </div>
-                                <div>
+                </div>
+                <div class="uk-text-truncate">
+                    {{ companyLeads.company.email }}<br/>
+                    <a :href="companyLeads.company.data.website" target="_blank">
+                        <i class="uk-icon-external-link uk-margin-small-right"></i>
+                        {{ companyLeads.company.data.website }}
+                    </a><br/>
+                    Tel: <a v-phone.auto="companyLeads.company.phone">{{ companyLeads.company.phone }}</a><br/>
+                    KvK: {{ companyLeads.company.data.coc_number }}<br/>
+                </div>
+                <div class="uk-text-truncate">
+                    <a :href="$url.route('admin/contactmanager/company/edit', { id: companyLeads.company.id })"
+                       target="_blank">
+                        <i class="uk-icon-external-link uk-margin-small-right"></i>
+                        {{ companyLeads.company.name }}
+                    </a><br/>
+                    <a :href="getDatacollectiefLink(companyLeads.company)" target="_blank">
+                        <i class="uk-icon-external-link uk-margin-small-right"></i>
+                        Websiteleads
+                    </a>
 
-                                    <input-terms-many taxonomy-name="cm.company.indication"
-                                                      :item_id="processed.company.id"></input-terms-many>
+                </div>
+                <div>
 
-                                </div>
-                            </div>
+                    <input-terms-many taxonomy-name="cm.company.indication"
+                                      :item_id="companyLeads.company.id"></input-terms-many>
 
-                        </div>
+                </div>
+            </div>
+
+            <div v-for="lead in companyLeads.leads" track-by="Id" class="uk-grid uk-grid-small">
+                <div class="uk-width-1-4">
+                    <div class="uk-text-bold">
+                        {{ lead.InfoVisit.StartDate | date 'shortDate' }} {{
+                        lead.InfoVisit.StartTime }} (score {{ lead.InfoVisit.HighestRatingScore }})
                     </div>
+                </div>
+                <div class="uk-width-3-4">
+                    <div v-html="lead.ClickPathContent"></div>
                 </div>
             </div>
         </li>

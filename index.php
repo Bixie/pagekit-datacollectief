@@ -33,10 +33,15 @@ return [
     ],
 
     'config' => [
-        'api_url' => '',
-        'application_key' => '',
-        'license_name' => '',
+        'api_url' => 'https://api.datacollectief.nl/api/',
+        'application_name' => '',
+        'user' => '',
         'password' => '',
+        'BaseTableBranche' => [],
+        'BaseTableEmployee' => [],
+        'BaseTableImportExport' => [],
+        'BaseTableLegalForm' => [],
+        'BaseTableMessageReasons' => [],
         'wl_last_checked' => (new DateTime())->format(DATE_ATOM),
         'wl_tag_ignore' => [],
         'wl_tag_add' => [],
