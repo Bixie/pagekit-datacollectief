@@ -41,7 +41,7 @@ return [
         'BaseTableEmployee' => [],
         'BaseTableImportExport' => [],
         'BaseTableLegalForm' => [],
-        'BaseTableMessageReasons' => [],
+        'BaseTableMessageReason' => [],
         'wl_last_checked' => (new DateTime())->format(DATE_ATOM),
         'wl_tag_ignore' => [],
         'wl_tag_add' => [],

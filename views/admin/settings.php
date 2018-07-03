@@ -1,4 +1,3 @@
-
 <?php
 $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/datacollectief-settings.js', ['bixie-pkframework'],
     ['version' => $app->module('bixie/pk-framework')->getVersionKey($app->package('bixie/datacollectief')->get('version'))]);
@@ -66,7 +65,14 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                 </li>
                 <li class="uk-form uk-form-horizontal">
 
-                    <h2>{{ 'Websiteleads Settings' | trans }}</h2>
+                    <div class="uk-margin uk-flex uk-flex-space-between uk-flex-wrap" data-uk-margin>
+                        <h2 class="uk-margin-remove">{{ 'Websiteleads Settings' | trans }}</h2>
+                        <div>
+
+                            <button class="uk-button uk-button-primary" @click="save">{{ 'Save' | trans }}</button>
+
+                        </div>
+                    </div>
 
                     <div class="uk-form-row">
                         <label class="uk-form-label">{{ 'Websiteleads last checked' | trans }}</label>
@@ -194,7 +200,7 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                     <div class="uk-margin uk-flex uk-flex-space-between uk-flex-wrap" data-uk-margin>
                         <h2 class="uk-margin-remove">{{ 'Reasons' | trans }}</h2>
                         <div>
-                            <a @click="getBaseTable('BaseTableMessageReasons', 'Code')">
+                            <a @click="getBaseTable('BaseTableMessageReason', 'Code')">
                                 <i class="uk-icon-refresh uk-margin-small-right"></i>
                                 {{ 'Refresh data' | trans }}
                             </a>
@@ -202,7 +208,7 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                     </div>
 
                     <ul class="uk-margin uk-list uk-list-line">
-                        <li v-for="item in config.BaseTableMessageReasons" class="uk-flex">
+                        <li v-for="item in config.BaseTableMessageReason" class="uk-flex">
                             <div class="uk-width-1-6 uk-text-right uk-margin-right"><em>{{item.Code}}</em></div>
                             <div class="uk-flex-item-1">
                                 {{item.Description}}<br/>

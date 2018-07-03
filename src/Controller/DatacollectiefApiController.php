@@ -43,27 +43,15 @@ class DatacollectiefApiController
      */
     public function baseTableAction($table, $identifier = null)
     {
-        $return_properties = [
-            'BaseTableBranche' => 'BaseTableBranches',
-            'BaseTableEmployee' => 'BaseTableEmployees',
-            'BaseTableImportExport' => 'BaseTableBaseTableImportExport',
-            'BaseTableLegalForm' => 'BaseTableLegalForm',
-            'BaseTableMessageReasons' => 'MessageReasons',
-        ];
-
-        if (!isset($return_properties[$table])) {
-            App::abort(400, sprintf('Base table %s invalid', $table));
-        }
-
         try {
             $responseData = App::get('datacollectief.api')->baseTable($table);
             if ($identifier) {
                 $baseTable = [];
-                foreach ($responseData[$return_properties[$table]] as $item) {
+                foreach ($responseData[$table] as $item) {
                     $baseTable[$item[$identifier]] = $item;
                 }
             } else {
-                $baseTable = $responseData[$return_properties[$table]];
+                $baseTable = $responseData[$table];
             }
 
         } catch (DatacollectiefApiException $e) {

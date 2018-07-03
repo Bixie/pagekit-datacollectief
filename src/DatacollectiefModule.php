@@ -80,8 +80,8 @@ class DatacollectiefModule extends Module
      * @return string
      */
     public function getMessageReasonDescription ($Code) {
-        if (isset($this->config['BaseTableMessageReasons'][$Code])) {
-            return $this->config['BaseTableMessageReasons'][$Code]['Description'];
+        if (isset($this->config['BaseTableMessageReason'][$Code])) {
+            return $this->config['BaseTableMessageReason'][$Code]['Description'];
         }
         return $Code;
     }
