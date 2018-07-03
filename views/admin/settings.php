@@ -59,6 +59,8 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                             <dd>{{apiInfo.CreditsFromWUS}}</dd>
                             <dt>{{ 'Credits used for alerts' | trans }}</dt>
                             <dd>{{apiInfo.CreditsUsedForAlerts}}</dd>
+                            <dt>{{ 'Account page' | trans }}</dt>
+                            <dd><a :href="apiInfo.Url" target="_blank">{{apiInfo.Url}}</a></dd>
                         </dl>
                     </div>
 

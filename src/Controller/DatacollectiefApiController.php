@@ -24,8 +24,9 @@ class DatacollectiefApiController
         try {
             $versionInfo = App::get('datacollectief.api')->version();
             $downloadStatistics = App::get('datacollectief.api')->downloadStatistics();
+            $accountInfo = App::get('datacollectief.api')->urlAccountInfo();
 
-            $apiInfo = array_merge($versionInfo, $downloadStatistics);
+            $apiInfo = array_merge($versionInfo, $downloadStatistics, $accountInfo);
 
         } catch (DatacollectiefApiException $e) {
             App::abort($e->getCode(), $e->getMessage());
