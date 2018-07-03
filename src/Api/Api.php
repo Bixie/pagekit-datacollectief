@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\Request as GuzzleRequest;
 
 class Api {
 
-    use WebsiteleadsTrait, ToolsTrait;
+    use WebsiteleadsTrait, ToolsTrait, CompanyTrait;
 
     protected $config = [];
 
@@ -50,12 +50,16 @@ class Api {
                 $url,
                 array_merge([], $headers)
             );
-            //only GET requests are accepted, so all data must go in the query
-            $response = $this->client->send($request, ['query' => array_merge([
-                'applicationName' => $this->config['application_name'],
-                'user' => $this->config['user'],
-                'password' => $this->config['password'],
-            ], $data)]);
+            $get_data = $method == 'get' ? $data : [];
+            $post_data = $method == 'post' ? $data : [];
+            $response = $this->client->send($request, [
+                'query' => array_merge([
+                        'applicationName' => $this->config['application_name'],
+                        'user' => $this->config['user'],
+                        'password' => $this->config['password'],
+                    ], $get_data),
+                'json' => $post_data,
+            ]);
 
             if ($error = $this->getErrorMessage($response)) {
                 return new GuzzleResponse($response->getStatusCode(), [], null, '1.1', $error);
