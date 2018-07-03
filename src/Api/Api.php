@@ -11,7 +11,7 @@ use GuzzleHttp\Psr7\Request as GuzzleRequest;
 
 class Api {
 
-    use WebsiteleadsTrait, ToolsTrait, CompanyTrait;
+    use WebsiteleadsTrait, ToolsTrait, CompanyTrait, ContactTrait;
 
     protected $config = [];
 

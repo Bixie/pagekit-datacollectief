@@ -178,7 +178,7 @@ class DatacollectiefApiController
     }
 
     /**
-     * @Route ("/company/feedback/{id}", methods="GET", name="company/feedback")
+     * @Route ("/company/feedback/{id}", methods="POST", name="company/feedback")
      * @Request({"id": "int"}, csrf=true)
      * @param int    $id
      * @param int    $reasonId
@@ -191,6 +191,120 @@ class DatacollectiefApiController
     {
         try {
             $result = App::get('datacollectief.api')->userFeedbackCompany($id, $reasonId, $data, $memo, $otherReason);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route ("/contact/list/{companyId}", methods="GET", name="contact/list")
+     * @Request({"companyId": "int"}, csrf=true)
+     * @param int $companyId
+     * @return array
+     */
+    public function contactListAction($companyId)
+    {
+
+        try {
+            $list = App::get('datacollectief.api')->contactList($companyId);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $list;
+    }
+
+    /**
+     * @Route ("/contact/{id}", methods="GET", name="contact")
+     * @Request({"id": "int"}, csrf=true)
+     * @param int $id
+     * @return array
+     */
+    public function contactAction($id)
+    {
+        try {
+            $result = App::get('datacollectief.api')->contact($id);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route ("/contact", methods="POST", name="contact")
+     * @Request({"data": "array"}, csrf=true)
+     * @param array $data
+     * @return array
+     */
+    public function contactNewAction($data)
+    {
+        try {
+            $result = App::get('datacollectief.api')->contactNew($data);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route ("/contact/limited/{id}", methods="GET", name="contact/limited")
+     * @Request({"id": "int"}, csrf=true)
+     * @param int $id
+     * @return array
+     */
+    public function contactLimitedAction($id)
+    {
+        try {
+            $result = App::get('datacollectief.api')->contactLimited($id);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route ("/contact/updated", methods="GET", name="contact/updated")
+     * @Request({"id": "int"}, csrf=true)
+     * @param array  $contactIds
+     * @param string $lastChangedDate
+     * @return array
+     */
+    public function updatedContactsAction($contactIds, $lastChangedDate)
+    {
+        try {
+            $result = App::get('datacollectief.api')->UpdatedContacts($contactIds, $lastChangedDate);
+        } catch (DatacollectiefApiException $e) {
+            App::abort($e->getCode(), $e->getMessage());
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route ("/contact/feedback/{id}", methods="POST", name="contact/feedback")
+     * @Request({"id": "int"}, csrf=true)
+     * @param int    $id
+     * @param int    $reasonId
+     * @param array  $data
+     * @param string $memo
+     * @param string $otherReason
+     * @return array
+     */
+    public function userFeedbackContactAction($id, $reasonId, $data, $memo = '', $otherReason = '')
+    {
+        try {
+            $result = App::get('datacollectief.api')->userFeedbackContact($id, $reasonId, $data, $memo, $otherReason);
         } catch (DatacollectiefApiException $e) {
             App::abort($e->getCode(), $e->getMessage());
             return [];
