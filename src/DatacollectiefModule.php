@@ -32,6 +32,17 @@ class DatacollectiefModule extends Module
     }
 
     /**
+     * @param string $functionID
+     * @return string
+     */
+    public function getFunctionDescription ($functionID) {
+        if (isset($this->config['BaseTableFunction'][$functionID])) {
+            return $this->config['BaseTableFunction'][$functionID]['Description'];
+        }
+        return $functionID;
+    }
+
+    /**
      * @param string $brancheID
      * @return string
      */

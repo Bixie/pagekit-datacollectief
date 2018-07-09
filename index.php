@@ -37,6 +37,7 @@ return [
         'application_name' => '',
         'user' => '',
         'password' => '',
+        'BaseTableFunction' => [],
         'BaseTableBranche' => [],
         'BaseTableEmployee' => [],
         'BaseTableImportExport' => [],

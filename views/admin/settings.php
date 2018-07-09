@@ -11,6 +11,7 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                 <ul class="uk-nav uk-nav-side pk-nav-large" data-uk-tab="{ connect: '#tab-content' }">
                     <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Settings' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Websiteleads' | trans }}</a></li>
+                    <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Functions' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Branches' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Employees' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Data' | trans }}</a></li>
@@ -118,6 +119,26 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                             <p class="uk-form-help-block">{{ 'Verwijder deze tags bij bedrijf' | trans }}</p>
                         </div>
                     </div>
+
+                </li>
+                <li>
+
+                    <div class="uk-margin uk-flex uk-flex-space-between uk-flex-wrap" data-uk-margin>
+                        <h2 class="uk-margin-remove">{{ 'Functions' | trans }}</h2>
+                        <div>
+                            <a @click="getBaseTable('BaseTableFunction', 'FunctionID')">
+                                <i class="uk-icon-refresh uk-margin-small-right"></i>
+                                {{ 'Refresh data' | trans }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <ul class="uk-margin uk-list uk-list-line">
+                        <li v-for="item in config.BaseTableFunction" class="uk-flex">
+                            <div class="uk-width-1-6 uk-text-right uk-margin-right"><em>{{item.FunctionID}}</em></div>
+                            <div class="uk-flex-item-1">{{item.Description}}</div>
+                        </li>
+                    </ul>
 
                 </li>
                 <li>
