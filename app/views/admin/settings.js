@@ -1,11 +1,15 @@
 /* global Vue, */
-
+import FunctionSelect from '../../components/function-select.vue';
 // @vue/component
 const vm = {
 
     el: '#datacollectief-settings',
 
     name: 'DatacollectiefSettings',
+
+    components: {
+        'function-select': FunctionSelect,
+    },
 
     fields: require('../../settings/fields'),
 
@@ -29,6 +33,9 @@ const vm = {
     },
 
     methods: {
+        setImportFunctions(value) {
+            this.config.wl_import_functions = value;
+        },
         getApiInfo() {
             this.Api.info().then(res => {
                 this.apiInfo = res.data.apiInfo;

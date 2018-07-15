@@ -77,14 +77,36 @@ $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/b
                 </div>
                 <div class="uk-text-truncate">
                     {{ companyLeads.company.email }}<br/>
-                    <a :href="companyLeads.company.data.website" target="_blank">
+                    <a :href="getSiteUrl(companyLeads.company.data.website)" target="_blank">
                         <i class="uk-icon-external-link uk-margin-small-right"></i>
                         {{ companyLeads.company.data.website }}
                     </a><br/>
                     Tel: <a v-phone.auto="companyLeads.company.phone">{{ companyLeads.company.phone }}</a><br/>
                     KvK: {{ companyLeads.company.data.coc_number }}<br/>
                 </div>
-                <div class="uk-text-truncate">
+                <div>
+                    <div class="uk-position-relative uk-margin-small-bottom" data-uk-dropdown="pos:'bottom-right', mode: 'click'">
+                        <button type="button" class="uk-button uk-button-small uk-text-nowrap">
+                            {{ 'Contactpersonen' | trans }}
+                            <span title="In Datacollectief">{{ companyLeads.dc_contacts.length }}</span>/<span
+                                    title="In Contactmanager">{{ companyLeads.known_contacts.length }}</span>
+                            <i class="uk-icon-caret-down uk-margin-small-left"></i>
+                        </button>
+                        <div class="uk-dropdown uk-dropdown-scrollable">
+                            <ul class="uk-nav uk-nav-dropdown">
+                                <li v-for="contact in companyLeads.dc_contacts">
+                                    <strong class="uk-display-block uk-text-truncate">
+                                        <i v-if="companyLeads.known_contacts.indexOf(contact.ID) > -1"
+                                           class="uk-icon-check uk-margin-small-right uk-text-success"
+                                           title="In Contactmanager"></i>
+                                        {{ contact.Name }}
+                                    </strong>
+                                    <small>{{ contact.FunctionDescription || contact.FunctionID }}</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <a :href="$url.route('admin/contactmanager/company/edit', { id: companyLeads.company.id })"
                        target="_blank">
                         <i class="uk-icon-external-link uk-margin-small-right"></i>

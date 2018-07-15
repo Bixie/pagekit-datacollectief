@@ -37,12 +37,14 @@ const vm = {
         leadsByCompany() {
             const leads = {};
             this.filteredProcessedData.forEach(processed => {
-                const {messages, changed_data, company, lead,} = processed;
+                const {messages, changed_data, company, lead, dc_contacts, known_contacts,} = processed;
                 if (!leads[company.id]) {
                     leads[company.id] = {
                         company,
                         messages,
                         changed_data,
+                        dc_contacts,
+                        known_contacts,
                         leads: [lead,],
                     };
                 } else {
@@ -94,6 +96,12 @@ const vm = {
         },
         getDatacollectiefLink(company) {
             return `https://mijn.datacollectief.nl/?id=${company.external_id}&a=wsl`;
+        },
+        getSiteUrl(url) {
+            if (!url.match('^https?://')) {
+                return `http://${url}`;
+            }
+            return url;
         },
     },
 

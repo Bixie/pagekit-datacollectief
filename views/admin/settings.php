@@ -120,6 +120,17 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                         </div>
                     </div>
 
+                    <div class="uk-form-row">
+                        <label class="uk-form-label">{{ 'Contactpersonen toevoegen' | trans }}</label>
+
+                        <div class="uk-form-controls">
+                            <function-select :value="config.wl_import_functions"
+                                             :items="config.BaseTableFunction"
+                                             @input:functions="setImportFunctions"></function-select>
+                            <p class="uk-form-help-block">{{ 'Voeg contactpersonen toe met deze functies.' | trans }}</p>
+                        </div>
+                    </div>
+
                 </li>
                 <li>
 
