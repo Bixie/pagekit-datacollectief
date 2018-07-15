@@ -282,7 +282,7 @@ class DatacollectiefApiController
 
     /**
      * @Route ("/contact/feedback/{id}", methods="POST", name="contact/feedback")
-     * @Request({"id": "int"}, csrf=true)
+     * @Request({"id": "int", "reasonId": "string", "data": "array", "memo": "string", "otherReason": "string"}, csrf=true)
      * @param int    $id
      * @param int    $reasonId
      * @param array  $data
