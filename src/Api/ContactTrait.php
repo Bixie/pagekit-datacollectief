@@ -19,7 +19,7 @@ trait ContactTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -34,12 +34,12 @@ trait ContactTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
     /**
-     * @param int $id
+     * @param int $id Company ID
      * @return array
      * @throws DatacollectiefApiException
      */
@@ -49,8 +49,29 @@ trait ContactTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
+    }
+
+    /**
+     * @param array $ids
+     * @return array
+     */
+    public function multipleContacts ($ids) {
+        $datas = array_map(function ($id) {
+            return ['id' => $id,];
+        }, $ids);
+        $responses = $this->getPool('Contact', $datas);
+        $results = [];
+        foreach ($responses as $response) {
+            if (false !== ($data = $this->getData($response))) {
+                $results[] = $data;
+            } else {
+                //error
+                $results[] = [];
+            }
+        }
+        return $results;
     }
 
     /**
@@ -64,12 +85,12 @@ trait ContactTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
     /**
-     * @param array $contactIds
+     * @param array|string $contactIds
      * @param string $lastChangedDate
      * @return array
      * @throws DatacollectiefApiException
@@ -78,12 +99,13 @@ trait ContactTrait {
         //convert date
         $tzZ = new \DateTimeZone('Europe/Amsterdam');
         $lastChangedDate = (new \DateTime($lastChangedDate))->setTimezone($tzZ)->format('Y-m-d H:i:s');
+        $contactIds = implode(',', (array)$contactIds);
         /** @var GuzzleResponse $response */
         $response = $this->send('get', 'UpdatedContacts', compact('contactIds', 'lastChangedDate'));
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -103,7 +125,7 @@ trait ContactTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 

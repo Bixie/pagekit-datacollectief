@@ -6,8 +6,10 @@ namespace Bixie\Datacollectief\Api;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Uri;
 
 class Api {
 
@@ -61,10 +63,6 @@ class Api {
                 'json' => $post_data,
             ]);
 
-            if ($error = $this->getErrorMessage($response)) {
-                return new GuzzleResponse($response->getStatusCode(), [], null, '1.1', $error);
-            }
-
             return $response;
 
         } catch (RequestException $e) {
@@ -84,6 +82,34 @@ class Api {
             return new GuzzleResponse(500, [], null, '1.1', $e->getMessage());
 
         }
+    }
+
+    /**
+     * @param       $url
+     * @param array $datas
+     * @param array $headers
+     * @return GuzzleResponse[]
+     */
+    protected function getPool ($url, $datas = [], $headers = []) {
+
+        $uri = new Uri($url);
+        $requests = array_map(function ($data) use ($uri, $headers) {
+            $query = http_build_query(array_merge([
+                'applicationName' => $this->config['application_name'],
+                'user' => $this->config['user'],
+                'password' => $this->config['password'],
+            ], $data), null, '&', PHP_QUERY_RFC3986);
+
+            return new GuzzleRequest(
+                'GET',
+                $uri->withQuery($query),
+                array_merge([], $headers)
+            );
+        }, $datas);
+
+        $responses = Pool::batch($this->client, $requests, ['concurrency' => 20,]);
+
+        return $responses;
     }
 
     /**
@@ -123,7 +149,7 @@ class Api {
                 }
             }
 
-            return false;
+            return '';
         } catch (\Exception $e) {
             return 'Error in response body';
         }

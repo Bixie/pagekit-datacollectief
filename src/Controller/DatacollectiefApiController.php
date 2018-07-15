@@ -6,6 +6,7 @@ namespace Bixie\Datacollectief\Controller;
 use Bixie\Datacollectief\Api\DatacollectiefApiException;
 use Bixie\Datacollectief\Event\DatacollectiefApiEvent;
 use Pagekit\Application as App;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Datacollectief API Controller
@@ -17,7 +18,7 @@ class DatacollectiefApiController
     /**
      * @Route ("/info", methods="GET", name="info")
      * @Request(csrf=true)
-     * @return array
+     * @return array|Response
      */
     public function infoAction()
     {
@@ -29,7 +30,7 @@ class DatacollectiefApiController
             $apiInfo = array_merge($versionInfo, $downloadStatistics, $accountInfo);
 
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return compact('apiInfo');
@@ -40,7 +41,7 @@ class DatacollectiefApiController
      * @Request({"table": "string", "identifier": "string"}, csrf=true)
      * @param string $table
      * @param null $identifier
-     * @return array
+     * @return array|Response
      */
     public function baseTableAction($table, $identifier = null)
     {
@@ -56,7 +57,7 @@ class DatacollectiefApiController
             }
 
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return compact('baseTable');
@@ -66,7 +67,7 @@ class DatacollectiefApiController
      * @Route ("/company/list", methods="GET", name="company/list")
      * @Request({"options": "array"}, csrf=true)
      * @param array $options
-     * @return array
+     * @return array|Response
      */
     public function companyListAction($options = [])
     {
@@ -78,8 +79,7 @@ class DatacollectiefApiController
         try {
             $list = App::get('datacollectief.api')->companyList($options);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $list;
@@ -88,15 +88,14 @@ class DatacollectiefApiController
     /**
      * @Route ("/urlcompanyselection", methods="GET", name="urlcompanyselection")
      * @Request(csrf=true)
-     * @return array
+     * @return array|Response
      */
     public function urlCompanySelectionAction()
     {
         try {
             $result = App::get('datacollectief.api')->urlCompanySelection();
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -108,33 +107,31 @@ class DatacollectiefApiController
      * @param int $selectionId
      * @param int $pageNr
      * @param int $recordsPerPage
-     * @return array
+     * @return array|Response
      */
     public function companySelectionAction($selectionId, $pageNr = 1, $recordsPerPage = 20)
     {
         try {
             $list = App::get('datacollectief.api')->companySelection($selectionId, $pageNr, $recordsPerPage);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $list;
     }
 
     /**
-     * @Route ("/company/{id}", methods="GET", name="company")
+     * @Route ("/company/full/{id}", methods="GET", name="company/full")
      * @Request({"id": "int"}, csrf=true)
      * @param int $id
-     * @return array
+     * @return array|Response
      */
     public function companyAction($id)
     {
         try {
             $result = App::get('datacollectief.api')->company($id);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -144,15 +141,14 @@ class DatacollectiefApiController
      * @Route ("/company/limited/{id}", methods="GET", name="company/limited")
      * @Request({"id": "int"}, csrf=true)
      * @param int $id
-     * @return array
+     * @return array|Response
      */
     public function companyLimitedAction($id)
     {
         try {
             $result = App::get('datacollectief.api')->companyLimited($id);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -160,18 +156,17 @@ class DatacollectiefApiController
 
     /**
      * @Route ("/company/updated", methods="GET", name="company/updated")
-     * @Request({"id": "int"}, csrf=true)
+     * @Request({"companyIds": "array", "lastChangedDate": "string"}, csrf=true)
      * @param array  $companyIds
      * @param string $lastChangedDate
-     * @return array
+     * @return array|Response
      */
-    public function updatedCompaniesAction($companyIds, $lastChangedDate)
+    public function updatedCompaniesAction($companyIds, $lastChangedDate = '')
     {
         try {
             $result = App::get('datacollectief.api')->UpdatedCompanies($companyIds, $lastChangedDate);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -185,15 +180,14 @@ class DatacollectiefApiController
      * @param array  $data
      * @param string $memo
      * @param string $otherReason
-     * @return array
+     * @return array|Response
      */
     public function userFeedbackCompanyAction($id, $reasonId, $data, $memo = '', $otherReason = '')
     {
         try {
             $result = App::get('datacollectief.api')->userFeedbackCompany($id, $reasonId, $data, $memo, $otherReason);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -203,7 +197,7 @@ class DatacollectiefApiController
      * @Route ("/contact/list/{companyId}", methods="GET", name="contact/list")
      * @Request({"companyId": "int"}, csrf=true)
      * @param int $companyId
-     * @return array
+     * @return array|Response
      */
     public function contactListAction($companyId)
     {
@@ -211,44 +205,41 @@ class DatacollectiefApiController
         try {
             $list = App::get('datacollectief.api')->contactList($companyId);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $list;
     }
 
     /**
-     * @Route ("/contact/{id}", methods="GET", name="contact")
+     * @Route ("/contact/full/{id}", methods="GET", name="contact/full")
      * @Request({"id": "int"}, csrf=true)
      * @param int $id
-     * @return array
+     * @return array|Response
      */
     public function contactAction($id)
     {
         try {
             $result = App::get('datacollectief.api')->contact($id);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
     }
 
     /**
-     * @Route ("/contact", methods="POST", name="contact")
+     * @Route ("/contact/new", methods="POST", name="contact/new")
      * @Request({"data": "array"}, csrf=true)
      * @param array $data
-     * @return array
+     * @return array|Response
      */
     public function contactNewAction($data)
     {
         try {
             $result = App::get('datacollectief.api')->contactNew($data);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -258,15 +249,14 @@ class DatacollectiefApiController
      * @Route ("/contact/limited/{id}", methods="GET", name="contact/limited")
      * @Request({"id": "int"}, csrf=true)
      * @param int $id
-     * @return array
+     * @return array|Response
      */
     public function contactLimitedAction($id)
     {
         try {
             $result = App::get('datacollectief.api')->contactLimited($id);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -274,18 +264,17 @@ class DatacollectiefApiController
 
     /**
      * @Route ("/contact/updated", methods="GET", name="contact/updated")
-     * @Request({"id": "int"}, csrf=true)
+     * @Request({"contactIds": "array", "lastChangedDate": "string"}, csrf=true)
      * @param array  $contactIds
      * @param string $lastChangedDate
-     * @return array
+     * @return array|Response
      */
-    public function updatedContactsAction($contactIds, $lastChangedDate)
+    public function updatedContactsAction($contactIds, $lastChangedDate = '')
     {
         try {
             $result = App::get('datacollectief.api')->UpdatedContacts($contactIds, $lastChangedDate);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -299,15 +288,14 @@ class DatacollectiefApiController
      * @param array  $data
      * @param string $memo
      * @param string $otherReason
-     * @return array
+     * @return array|Response
      */
     public function userFeedbackContactAction($id, $reasonId, $data, $memo = '', $otherReason = '')
     {
         try {
             $result = App::get('datacollectief.api')->userFeedbackContact($id, $reasonId, $data, $memo, $otherReason);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return $result;
@@ -316,7 +304,7 @@ class DatacollectiefApiController
     /**
      * @Route ("/websiteleads/websites", methods="GET", name="websiteleads/websites")
      * @Request(csrf=true)
-     * @return array
+     * @return array|Response
      */
     public function websiteleadsWebsitesAction()
     {
@@ -325,7 +313,7 @@ class DatacollectiefApiController
             $websiteFields = App::get('datacollectief.api')->websites();
             $Websites = $websiteFields['Websites'];
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         return compact('Websites');
@@ -335,21 +323,31 @@ class DatacollectiefApiController
      * @Route ("/websiteleads/leads", methods="GET", name="websiteleads/leads")
      * @Request({"options": "array"}, csrf=true)
      * @param array $options
-     * @return array
+     * @return array|Response
      */
     public function websiteleadsLeadsAction($options = [])
     {
-
+        $company_contacts = [];
         $processed_data = [];
         try {
             $leads = App::get('datacollectief.api')->websiteleads($options);
         } catch (DatacollectiefApiException $e) {
-            App::abort($e->getCode(), $e->getMessage());
-            return [];
+            return (new Response($e->getMessage()))->setStatusCode($e->getCode(), $e->getStatusText());
         }
 
         foreach ($leads['Visits'] as $lead) {
-            $event = new DatacollectiefApiEvent('datacollectief.api.websitelead', $lead);
+            $companyId = $lead['Company']['Id'];
+            if (isset($company_contacts[$companyId])) {
+                $contacts = $company_contacts[$companyId];
+            } else {
+                try {
+                    $result = App::get('datacollectief.api')->contactList($companyId);
+                    $contacts = $company_contacts[$companyId] = $result['Contacts'];
+                } catch (DatacollectiefApiException $e) {
+                    //todo log?
+                }
+            }
+            $event = new DatacollectiefApiEvent('datacollectief.api.websitelead', $lead, compact('contacts'));
             App::trigger($event);
             if ($data = $event->getProcessedData()) {
                 $processed_data[] = $event->getProcessedData();

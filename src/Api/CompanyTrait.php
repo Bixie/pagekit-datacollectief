@@ -19,7 +19,7 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -34,7 +34,7 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -49,7 +49,7 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -63,7 +63,7 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -80,12 +80,12 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
     /**
-     * @param array $companyIds
+     * @param array|string $companyIds
      * @param string $lastChangedDate
      * @return array
      * @throws DatacollectiefApiException
@@ -94,12 +94,13 @@ trait CompanyTrait {
         //convert dates
         $tzZ = new \DateTimeZone('Europe/Amsterdam');
         $lastChangedDate = (new \DateTime($lastChangedDate))->setTimezone($tzZ)->format('Y-m-d H:i:s');
+        $companyIds = implode(',', (array)$companyIds);
         /** @var GuzzleResponse $response */
         $response = $this->send('get', 'UpdatedCompanies', compact('companyIds', 'lastChangedDate'));
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -119,7 +120,7 @@ trait CompanyTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
