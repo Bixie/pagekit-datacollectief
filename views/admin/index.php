@@ -100,6 +100,7 @@ $view->script('datacollectief-datacollectief-index', 'bixie/datacollectief:app/b
                                            class="uk-icon-check uk-margin-small-right uk-text-success"
                                            title="In Contactmanager"></i>
                                         {{ contact.Name }}
+                                        <small v-if="contact.FirstName" class="uk-margin-small-left">({{ contact.FirstName }})</small>
                                     </strong>
                                     <small>{{ contact.FunctionDescription || contact.FunctionID }}</small>
                                 </li>
