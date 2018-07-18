@@ -99,7 +99,7 @@ trait ContactTrait {
         //convert date
         $tzZ = new \DateTimeZone('Europe/Amsterdam');
         $lastChangedDate = (new \DateTime($lastChangedDate))->setTimezone($tzZ)->format('Y-m-d H:i:s');
-        $contactIds = implode(',', (array)$contactIds);
+        $contactIds = implode(',', array_unique((array)$contactIds));
         /** @var GuzzleResponse $response */
         $response = $this->send('get', 'UpdatedContacts', compact('contactIds', 'lastChangedDate'));
         if (false !== ($data = $this->getData($response))) {

@@ -94,7 +94,7 @@ trait CompanyTrait {
         //convert dates
         $tzZ = new \DateTimeZone('Europe/Amsterdam');
         $lastChangedDate = (new \DateTime($lastChangedDate))->setTimezone($tzZ)->format('Y-m-d H:i:s');
-        $companyIds = implode(',', (array)$companyIds);
+        $companyIds = implode(',', array_unique((array)$companyIds));
         /** @var GuzzleResponse $response */
         $response = $this->send('get', 'UpdatedCompanies', compact('companyIds', 'lastChangedDate'));
         if (false !== ($data = $this->getData($response))) {
