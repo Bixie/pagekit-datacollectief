@@ -17,7 +17,7 @@ trait WebsiteleadsTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 
@@ -40,7 +40,7 @@ trait WebsiteleadsTrait {
         if (false !== ($data = $this->getData($response))) {
             return $data ?: [];
         } else {
-            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode());
+            throw new DatacollectiefApiException($response->getReasonPhrase(), $response->getStatusCode(), $this->getErrorMessage($response));
         }
     }
 }
