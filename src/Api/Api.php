@@ -52,8 +52,11 @@ class Api {
                 $url,
                 array_merge([], $headers)
             );
-            $get_data = $method == 'get' ? $data : [];
-            $post_data = $method == 'post' ? $data : [];
+//            $get_data = $method == 'get' ? $data : [];
+//            $post_data = $method == 'post' ? $data : [];
+            //post data goes in URI???
+            $post_data = [];
+            $get_data = $data;
             $response = $this->client->send($request, [
                 'query' => array_merge([
                         'applicationName' => $this->config['application_name'],
