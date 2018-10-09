@@ -31,4 +31,13 @@ module.exports = {
             },
         },
     },
+    sv_settings: {
+        sv_api_key: {
+            type: 'text',
+            label: 'Salesviewer API key',
+            attrs: {
+                'class': 'uk-form-width-large',
+            },
+        },
+    },
 };

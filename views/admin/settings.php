@@ -10,6 +10,7 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
 
                 <ul class="uk-nav uk-nav-side pk-nav-large" data-uk-tab="{ connect: '#tab-content' }">
                     <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Settings' | trans }}</a></li>
+                    <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Salesviewer' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-settings uk-margin-right"></i> {{ 'Websiteleads' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Functions' | trans }}</a></li>
                     <li><a><i class="pk-icon-large-database uk-margin-right"></i> {{ 'Branches' | trans }}</a></li>
@@ -64,6 +65,20 @@ $view->script('datacollectief-settings', 'bixie/datacollectief:app/bundle/dataco
                             <dd><a :href="apiInfo.Url" target="_blank">{{apiInfo.Url}}</a></dd>
                         </dl>
                     </div>
+
+                </li>
+                <li class="uk-form uk-form-horizontal">
+
+                    <div class="uk-margin uk-flex uk-flex-space-between uk-flex-wrap" data-uk-margin>
+                        <h2 class="uk-margin-remove">{{ 'Salesviewer Settings' | trans }}</h2>
+                        <div>
+
+                            <button class="uk-button uk-button-primary" @click="save">{{ 'Save' | trans }}</button>
+
+                        </div>
+                    </div>
+
+                    <bixie-fields :config="$options.fields.sv_settings" :values.sync="config"></bixie-fields>
 
                 </li>
                 <li class="uk-form uk-form-horizontal">

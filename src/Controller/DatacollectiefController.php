@@ -31,6 +31,24 @@ class DatacollectiefController
     }
 
     /**
+     * @Route ("/salesviewer", methods="GET", name="salesviewer")
+     * @return array
+     */
+    public function salesviewerAction()
+    {
+
+        return [
+            '$view' => [
+                'title' => 'Salesviewer API',
+                'name' => 'bixie/datacollectief/admin/salesviewer.php',
+            ],
+            '$data' => [
+                'config' => App::module('bixie/datacollectief')->config(),
+            ],
+        ];
+    }
+
+    /**
      * @Access ("system: access settings")
      * @return array
      */

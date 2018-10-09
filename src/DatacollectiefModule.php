@@ -27,6 +27,10 @@ class DatacollectiefModule extends Module
                  ]), $app['debug']);
             };
 
+            $app['salesviewer.api'] = function ($app) {
+                return new Salesviewer\Api($this->config(['sv_api_key',]), $app['debug']);
+            };
+
         });
 
     }

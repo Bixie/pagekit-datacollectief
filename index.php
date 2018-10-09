@@ -24,6 +24,7 @@ return [
             'name' => '@datacollectief/api',
             'controller' => [
                 'Bixie\\Datacollectief\\Controller\\DatacollectiefApiController',
+                'Bixie\\Datacollectief\\Controller\\SalesviewerApiController',
             ],
         ],
     ],
@@ -48,6 +49,8 @@ return [
         'wl_tag_ignore' => [],
         'wl_tag_add' => [],
         'wl_tag_remove' => [],
+        'sv_api_key' => '',
+        'sv_last_checked' => (new DateTime())->format(DATE_ATOM),
     ],
 
     'menu' => [
@@ -64,6 +67,13 @@ return [
             'url' => '@datacollectief/index',
             'access' => 'datacollectief: use datacollectief',
             'active' => '@datacollectief/index',
+        ],
+        'datacollectief: salesviewer' => [
+            'label' => 'Salesviewer',
+            'parent' => 'datacollectief',
+            'url' => '@datacollectief/salesviewer',
+            'access' => 'datacollectief: use datacollectief',
+            'active' => '@datacollectief/salesviewer',
         ],
         'datacollectief: settings' => [
             'label' => 'Settings',

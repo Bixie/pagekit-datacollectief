@@ -4,6 +4,7 @@ module.exports = [
         entry: {
             /*views*/
             'datacollectief-datacollectief-index': './app/views/admin/index.js',
+            'datacollectief-datacollectief-salesviewer': './app/views/admin/salesviewer.js',
             'datacollectief-settings': './app/views/admin/settings.js',
         },
         output: {
